@@ -30,6 +30,14 @@ async def help(ctx):
 	prefix add <prefix>: adds a command prefix
 	prefix remove <prefix>: removes a command prefix
 	prefix list: lists all command prefixes
+[mysql]
+	mysql set
+		mysql set host <your_host>: sets host
+		mysql set database <your_database>: sets database
+		mysql set username <your_username>: sets username
+		mysql set password <your_password>: sets password
+	mysql test: tests remote MySQL connection
+	mysql show <table> <column>: shows the content of the given column in the given table
 	```"""
 	await ctx.send(res)
 
