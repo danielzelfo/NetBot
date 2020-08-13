@@ -38,6 +38,12 @@ async def help(ctx):
 		mysql set password <your_password>: sets password
 	mysql test: tests remote MySQL connection
 	mysql show <table> <column>: shows the content of the given column in the given table
+[ftp]
+	ftp setup <host> <user> <password> <port (optional)>: sets the ftp server credentials
+	ftp set
+		ftp set cwd <new_directory>: sets the current working directory
+	ftp get <file_name>: sends file to chat
+	ftp list: lists all files and subdirectories in the current working directory
 	```"""
 	await ctx.send(res)
 

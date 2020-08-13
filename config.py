@@ -15,9 +15,16 @@ default_mysql = {
     "username": None,
     "password": None
 }
+default_ftp = {
+    "host": None,
+    "username": None,
+    "password": None,
+    "port": 21
+}
 
 #custom user data
 custom_mysql = {}
+custom_ftp = {}
 custom_prefixes = {}
 
 #getting custom user data from json file
@@ -25,6 +32,7 @@ with open('data.json') as f:
     data = json.load(f)
 custom_prefixes = data["prefixes"]
 custom_mysql = data["mysql"]
+custom_ftp = data["ftp"]
 
 #function to determine the bot command prefixes
 async def prefixes(bot, message):
@@ -36,3 +44,6 @@ def _prefixes(guildid):
 #obtain mysql data using the guildid
 def mysql(guildid):
     return custom_mysql.get(guildid) or default_mysql
+#obtain ftp data using the guildid
+def ftp(guildid):
+    return custom_ftp.get(guildid) or default_ftp
