@@ -43,6 +43,7 @@ async def help(ctx):
 	ftp set
 		ftp set cwd <new_directory>: sets the current working directory
 	ftp get <file_name>: sends file to chat
+    ftp drop <absolute_directory_path (optional)>: add event to upload files sent to current channel to the provided directory in the ftp server
 	ftp list: lists all files and subdirectories in the current working directory
 	```"""
 	await ctx.send(res)
