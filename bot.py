@@ -31,20 +31,26 @@ async def help(ctx):
 	prefix remove <prefix>: removes a command prefix
 	prefix list: lists all command prefixes
 [mysql]
+    mysql setup <host> <database> <username> <password>: sets the mysql server credentials
 	mysql set
-		mysql set host <your_host>: sets host
-		mysql set database <your_database>: sets database
-		mysql set username <your_username>: sets username
-		mysql set password <your_password>: sets password
+		mysql set host <host>: sets mysql host
+		mysql set database <database>: sets mysql database
+		mysql set username <username>: sets mysql username
+		mysql set password <password>: sets mysql password
 	mysql test: tests remote MySQL connection
 	mysql show <table> <column>: shows the content of the given column in the given table
 [ftp]
 	ftp setup <host> <user> <password> <port (optional)>: sets the ftp server credentials
 	ftp set
-		ftp set cwd <new_directory>: sets the current working directory
+		ftp set host <host>: sets the ftp host
+		ftp set username <username>: sets the ftp username
+		ftp set password <password>: sets the ftp password
+		ftp set port <port>: sets the ftp port
+		ftp set cwd <directory>: sets the current working directory
 	ftp get <file_name>: sends file to chat
     ftp drop <absolute_directory_path (optional)>: add event to upload files sent to current channel to the provided directory in the ftp server
 	ftp list: lists all files and subdirectories in the current working directory
+	ftp test: tests the ftp credentials
 	```"""
 	await ctx.send(res)
 
