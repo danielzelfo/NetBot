@@ -1,9 +1,5 @@
-import discord
 import os
-from os import path
-
 from discord.ext import commands
-
 import config
 
 bot = commands.Bot(command_prefix=config.prefixes)

@@ -5,6 +5,7 @@ import os
 import sys
 import json
 import requests
+import re
 
 from ftplib import FTP
 
@@ -81,6 +82,7 @@ class Ftp(commands.Cog):
 
 	def __init__(self, bot):
 		self.bot = bot
+		self.MAXMSGLENGTH = 2000
 
 	#the ftp command
 	@commands.command()
@@ -290,8 +292,10 @@ class Ftp(commands.Cog):
 						ftpobjs[guildid].retrlines('LIST', dirList.append)
 
 						for idx, item in enumerate(dirList):
-							s = item.split(' ')
-							dirList[idx] = " ".join(s[0:-1])+ " ["+s[-1]+"]"
+							#finding time with regex (it is the last thing before the file name)
+							res = re.search(r'([0-1]?[0-9]|2[0-3]):[0-5][0-9]', dirList[idx])
+							#highlighting file name
+							dirList[idx] = dirList[idx][:res.end()+1]+"["+dirList[idx][res.end()+1:]+"]"
 
 						res = "```ini\n"+"\n".join(dirList)+"\n```"
 					else:
@@ -318,8 +322,47 @@ class Ftp(commands.Cog):
 		if err != "":
 			res = "`"+err+"`\n" + res
 
-		if(res != ""):
-			await ctx.send(res)
+		if res != "":
+			#checking if the message is above the maximum message length
+			if len(res) <= self.MAXMSGLENGTH:
+				await ctx.send(res)
+			else:
+				#potential markdown - splitting into different messages
+				if "```" in res:
+					resSplit = res.split("```")
+					if len(resSplit) > 2:
+						#splitting sections by code block markers
+						#odd number of code block markers
+						if len(resSplit) % 2 == 0:
+							resTemp = resSplit[-2] + "```" + resSplit[-1]
+							resSplit = resSplit[:-2]
+							resSplit.append(resTemp)
+
+						#re-adding code block markers
+						for i in range(len(resSplit)):
+							if i % 2 == 1:
+								resSplit[i] = f"```{resSplit[i]}```"
+
+						resSplit = [r for r in resSplit if not r == ""]
+					else:
+						#only one code block marker
+						resSplit = ["```".join(resSplit)]
+				else:
+					resSplit = [res]
+
+				for res in resSplit:
+					if res.startswith("```") and res.endswith("```"):
+						msgCodeLang = res[3:6]
+						chunkLengths = self.MAXMSGLENGTH - 11
+						res = res[7:-4]
+						resList = [f"```{msgCodeLang}\n"+res[i:i+chunkLengths]+"\n```" for i in range(0, len(res), chunkLengths)]
+					else:
+						resList = [res[i:i+self.MAXMSGLENGTH] for i in range(0, len(res), self.MAXMSGLENGTH)]
+
+					#sending the message in chunks
+					for m in resList:
+						await ctx.send(m)
+
 
 	#listener for any message
 	@commands.Cog.listener()
